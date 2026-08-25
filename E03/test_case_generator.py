@@ -1,7 +1,8 @@
 import argparse
 
 def main():
-    parser = argparse.ArgumentParser(prog='PROG', usage='%(prog)s [options]')
+    parser = argparse.ArgumentParser()
+    parser.add_argument()
 
 if __name__ == '__main__':
     main()

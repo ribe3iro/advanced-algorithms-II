@@ -61,7 +61,7 @@ int main(){
             }
             delta = health_points - ((upper_hp + bottom_hp) / 2);
             delta = abs(delta);
-        }while(delta >= EPSILON);
+        }while(!(delta < EPSILON && success));
         printf("%.3f\n", health_points+1e-3);
     }
 

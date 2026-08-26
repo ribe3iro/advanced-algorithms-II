@@ -50,9 +50,10 @@ int main(){
         float bottom_hp = 0;
 
         float health_points, delta;
+        bool success;
         do{
             health_points = (upper_hp + bottom_hp) / 2;
-            bool success = explore_dungeon(health_points, events);
+            success = explore_dungeon(health_points, events);
             if(success){
                 upper_hp = health_points;
             } else{

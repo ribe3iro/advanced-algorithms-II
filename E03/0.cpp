@@ -64,17 +64,11 @@ int main(){
 
         health_points = round(health_points * 1000.0) / 1000.0;
 
-        if(explore_dungeon(health_points, events)){
-            printf("%.3f\n", health_points);
-        } else if (!explore_dungeon(health_points+1e-3, events)){
-            for(auto [event, argument] : events){
-                cout << endl << event << " " << argument;
-            }
-            printf("\n%f", health_points);
-            return -1;
-        } else{
-            printf("%.3f\n", health_points+1e-3);
+        if(!explore_dungeon(health_points, events)){
+            health_points += 1e-3;
         }
+
+        printf("%.3f\n", health_points);
     }
 
     return 0;

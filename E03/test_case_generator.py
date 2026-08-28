@@ -24,7 +24,7 @@ def run_solver(input_data):
         return None, "TIME LIMIT"
 
     if result.returncode != 0:
-        return None, f"RUNTIME ERROR (code {result.returncode})"
+        return result.stdout, f"RUNTIME ERROR (code {result.returncode})"
 
     return result.stdout, None
 
@@ -38,19 +38,25 @@ def generate_in_n_out(num_cases):
         case_content = f"{E}\n"
         for e in range(E):
             event, interval = random.choice(list(EVENTS.items()))
-            case_content += f"{event}\n"
+            case_content += f"{event} "
             case_content += f"{round(random.uniform(*interval), 3)}\n"
         output, error = run_solver(f"1\n{case_content}")
-        if output:
+        if not error:
             t += 1
             in_content += case_content
             out_content += f"{output}"
+        elif error == "TIME LIMIT":
+            print("Timeout!")
+        else:
+            print(error)
+            print(output)
+            exit()
     return in_content, out_content
         
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", type=int, default=10)
+    parser.add_argument("-n", type=int, default=1)
     parser.add_argument("--sets", type=int, default=1)
     parser.add_argument("--seed", type=int, default=False)
 

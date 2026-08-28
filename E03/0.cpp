@@ -2,31 +2,29 @@
 
 using namespace std;
 
-const float EPSILON = 1e-4;
-const float MAX_HP = 1000;
+const double EPSILON = 1e-8;
+const double MAX_HP = 1000;
 
-bool explore_dungeon(float health_points, vector<pair<string, float>> events){
+bool explore_dungeon(double health_points, vector<pair<string, double>> events){
     for(auto [event, argument] : events){
+        if(health_points <= EPSILON){
+            return false;
+        }
+
         if(event == "DMG"){
             health_points -= argument;
         } else if(event == "POISON"){
             health_points = health_points * (1 - argument);
         } else if(event == "HEAL"){
-            health_points += argument;
+            health_points = health_points + argument;
+            health_points = min(health_points, 1000.0);
         } else if(event == "BLESS"){
             health_points = health_points * (argument + 1);
-        }
-
-        if(health_points > MAX_HP){
-            health_points = MAX_HP;
-        }
-
-        if(health_points <= 0){
-            return false;
+            health_points = min(health_points, 1000.0);
         }
     }
 
-    return true;
+    return health_points > EPSILON;
 }
 
 int main(){
@@ -37,19 +35,19 @@ int main(){
         int E;
         cin >> E;
 
-        vector<pair<string, float>> events;
+        vector<pair<string, double>> events;
         for(int j=0; j<E; j++){
             string event;
-            float argument;
+            double argument;
             cin >> event >> argument;
 
             events.push_back(make_pair(event, argument));
         }
 
-        float upper_hp = MAX_HP;
-        float bottom_hp = 0;
+        double upper_hp = MAX_HP;
+        double bottom_hp = 0;
 
-        float health_points, delta;
+        double health_points, delta;
         bool success;
         do{
             health_points = (upper_hp + bottom_hp) / 2;
@@ -63,7 +61,20 @@ int main(){
             delta = health_points - ((upper_hp + bottom_hp) / 2);
             delta = abs(delta);
         }while(!(delta < EPSILON && success));
-        printf("%.3f\n", health_points+1e-3);
+
+        health_points = round(health_points * 1000.0) / 1000.0;
+
+        if(explore_dungeon(health_points, events)){
+            printf("%.3f\n", health_points);
+        } else if (!explore_dungeon(health_points+1e-3, events)){
+            for(auto [event, argument] : events){
+                cout << endl << event << " " << argument;
+            }
+            printf("\n%f", health_points);
+            return -1;
+        } else{
+            printf("%.3f\n", health_points+1e-3);
+        }
     }
 
     return 0;

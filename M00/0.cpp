@@ -14,11 +14,11 @@ struct Compare{
     }
 };
 
-priority_queue<pair<float, int>, vector<pair<float, int>>, Compare> pq;
 
 int main(){
     int p, n;
     while(cin >> p >> n){
+        priority_queue<pair<float, int>, vector<pair<float, int>>, Compare> pq;
         float m;
         for(int i = 0; i < n; i++){
             cin >> m;
